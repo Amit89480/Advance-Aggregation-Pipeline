@@ -183,6 +183,83 @@
     }
   ]
 
+  // who has registered most recently
+
+  [
+    {
+      $sort: {
+        registered: -1
+      }
+    },
+    {
+      $limit: 4
+    },
+    {
+      $project: {
+        name:1,
+        registered:1,
+        age:1,
+        favoriteFruit:1
+      }
+    }
+  ]
+
+  //categorized user by their favourite fruit
+  [
+    {
+      $group: {
+        _id: "$favoriteFruit",
+        users: {
+          $push: "$name"  
+        }
+      }
+    }
+  ]
+
+  //how many users have ad as their second tags 
+  [
+    {
+      $match: {
+        "tags.1":"ad"
+      }
+    },
+    {
+      $count: 'userWithSecondTag'
+    }
+  ]
+
+  // find users with both enim and id in their tags
+  [
+    {
+      $match: {
+        tags: {
+          $all: ["enim","id"]
+        }
+      }
+    },
+    {
+      $count: 'userWithBothTags'
+    }
+  ]
+
+  //list all comoany located in usa with usercount
+
+  [
+    {
+      $match: {
+        "company.location.country":"USA"
+      }
+    },
+    {
+      $group: {
+        _id: "$company.title",
+        userCount: {
+          $sum: 1
+        }
+      }
+    }
+  ]
+
 
 
 
