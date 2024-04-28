@@ -261,5 +261,49 @@
   ]
 
 
+  //approach 1
+
+  [
+    {
+      $lookup: {
+        from: "authors",
+        localField: "author_id",
+        foreignField: "_id",
+        as: "authorDetails"
+      }
+    },
+    {
+      $addFields: {
+        authorDetails: {
+          $first:"$author_details"
+        }
+      }
+    }
+    
+  ]
+
+
+  // approach 2
+
+  [
+    {
+      $lookup: {
+        from: "authors",
+        localField: "author_id",
+        foreignField: "_id",
+        as: "authorDetails"
+      }
+    },
+    {
+      $addFields: {
+        authorDetails: {
+          $arrayElemAt:["$authorDetails",0]
+        }
+      }
+    }
+    
+  ]
+
+
 
 
